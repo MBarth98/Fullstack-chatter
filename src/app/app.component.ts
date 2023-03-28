@@ -1,10 +1,20 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FireService} from "./fire.service";
+
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: []
 })
-export class AppComponent {
-  title = 'fs';
+export class AppComponent implements OnInit {
+
+  constructor(public fireService: FireService) {
+
+  }
+
+  async ngOnInit() {
+
+  }
 }
