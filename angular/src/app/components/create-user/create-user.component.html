@@ -1,8 +1,15 @@
 <div>
-    <label>create user</label>
     <form>
-        <input type="text" [(ngModel)]="name" placeholder="Enter your name">
-        <input type="text" [(ngModel)]="email" placeholder="Enter your email">
+        <input  type="text" 
+                [(ngModel)]="name"
+                name="name" 
+                placeholder="Enter your name"
+            >
+        <input  type="text" 
+                [(ngModel)]="email"
+                name="email"
+                placeholder="Enter your email"
+            >
         <button (click)="onAddUser()">create user</button>
     </form>
 </div>

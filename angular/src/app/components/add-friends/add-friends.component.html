@@ -1,8 +1,10 @@
 <div>
-    <label>add friend to user</label>
     <form>
-        <input type="text" [(ngModel)]="src_email" placeholder="Enter your email">
-        <input type="text" [(ngModel)]="dest_email" placeholder="Enter your friend's email">
+        <input  type="text"
+                name="target"
+                [(ngModel)]="dest_email" 
+                placeholder="Enter your friend's email"
+            >
         <button (click)="onAddFriend()">add friend</button>
     </form>
 </div>

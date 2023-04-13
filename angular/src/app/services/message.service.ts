@@ -15,9 +15,13 @@ export class MessageService {
   }
 
   async createConversation(conversation: Conversation) {
-    await this.database.doc(conversation.id).set({
+    let convo = await this.database.add({
       name: conversation.name,
-      members: conversation.members
+      members: []
+    });
+    
+    await this.database.doc(convo.id).update({
+      members: conversation.members.map((member) => member.id)
     });
   }
 
@@ -53,6 +57,7 @@ export class MessageService {
     conversations.forEach((conversation) => {
       let data = conversation.data() as Conversation;
       data.id = conversation.id;
+      console.log("data.id: " + data.id);
       result.push(data);
     });
     return result;

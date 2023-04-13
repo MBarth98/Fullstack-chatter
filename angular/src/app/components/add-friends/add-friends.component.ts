@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -8,13 +9,12 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class AddFriendsComponent {
 
-  @Input() dest_email: string = "";
-  @Input() src_email: string = "";
+  dest_email: string = "";
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private authService: AuthService) {}
   
   onAddFriend() {
-    this.userService.addFriend(this.src_email, this.dest_email);
+    this.userService.addFriend(this.authService.currentUser.email, this.dest_email);
   }
 
 }

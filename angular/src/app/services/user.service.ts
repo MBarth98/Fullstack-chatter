@@ -12,12 +12,7 @@ export class UserService {
   constructor() {
     this.database = Firebase.storage.collection("users");
   }
-
-  async getUser(id: string) {
-    let doc = await this.database.doc(id).get();
-    return doc;
-  }
-
+  
   async addUser(name: string, email: string) {
     await this.database.doc().set({
       name: name,
@@ -26,7 +21,7 @@ export class UserService {
     });
   }
 
-  async findUserByEmail(email: string) {
+  async getUser(email: string) {
     let users = await this.database.where("email", "==", email).get();
     if (users.size == 0) {
       return null;
@@ -37,8 +32,8 @@ export class UserService {
   }
 
   async addFriend(src_email: string, target_email: string) {
-      var src = await this.findUserByEmail(src_email);
-      var target = await this.findUserByEmail(target_email);
+      var src = await this.getUser(src_email);
+      var target = await this.getUser(target_email);
 
       if (src == null || target == null) {
         return;

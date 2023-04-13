@@ -8,8 +8,8 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class CreateUserComponent {
 
-  @Input() name: string = "";
-  @Input() email: string = "";
+  name: string = "";
+  email: string = "";
 
   constructor(private userService: UserService) {}
 

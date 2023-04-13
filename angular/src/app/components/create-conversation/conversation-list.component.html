@@ -1,0 +1,24 @@
+<div>
+    <form>
+        <input  type="text" 
+                placeholder="Name"
+                name="name" 
+                [(ngModel)]="name"
+            >
+        <button (click)="onAddConversation()">Create Conversation</button>
+    </form>
+</div>
+
+<div>
+    <form>
+        <select>
+            <option *ngFor="let conversation of conversations" 
+                    [value]="conversation"
+                >
+                    {{conversation.name}}
+            </option>
+        </select>
+
+        <button (click)="onSelectConversation()">Select Conversation</button>
+    </form>
+</div>

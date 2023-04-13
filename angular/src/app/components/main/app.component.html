@@ -1,4 +1,13 @@
 
 
-<dialog-create-user/>
-<dialog-add-friends/>
+<div *ngIf="authService.currentUser == null; then show_login else show_content"></div>
+
+<ng-template #show_login>
+    <dialog-create-user/>
+    <app-user-login/>
+</ng-template>
+
+<ng-template #show_content>
+    <dialog-add-friends/>
+    <conversation-list/>
+</ng-template>
