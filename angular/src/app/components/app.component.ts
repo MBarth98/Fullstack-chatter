@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FireService, User } from './firebase.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ export class AppComponent {
   @Input() src_email: string = "";
 
   onAddFriend() {
-    this.fire.addFriend(this.src_email, this.dest_email);
+    this.userService.addFriend(this.src_email, this.dest_email);
   }
 
 
@@ -20,11 +20,11 @@ export class AppComponent {
   @Input() email: string = "";
 
   onAddUser() {
-    this.fire.addUser(this.name, this.email);
+    this.userService.addUser(this.name, this.email);
   }
 
-  constructor(private fire: FireService) {
-    fire.getUsers().then((users) => {
+  constructor(private userService: UserService) {
+    userService.getUsers().then((users) => {
       users.forEach((user) => {
         console.log(JSON.stringify(user));
       });
