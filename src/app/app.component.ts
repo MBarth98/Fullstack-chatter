@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {FireService} from "./fire.service";
 
 
 
@@ -10,7 +9,7 @@ import {FireService} from "./fire.service";
 })
 export class AppComponent implements OnInit {
 
-  constructor(public fireService: FireService) {
+  constructor() {
 
   }
 
