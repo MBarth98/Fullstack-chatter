@@ -4,4 +4,4 @@ cd angular
 ng build
 
 cd ..
-firebase deploy
+firebase $1
