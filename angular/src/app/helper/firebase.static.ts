@@ -77,7 +77,11 @@ export class ConversationConverter implements DataConverter<Conversation>
         conversation.name = (snapshot.data() as any).name;
         member_refs.forEach((member_ref) => {            
             member_ref.withConverter(new UserConverter(false)).get().then((member_snapshot) => {
-                conversation.members.push(member_snapshot.data() ?? User.create());
+                let data = member_snapshot.data();
+                if (data !== undefined )
+                {
+                    conversation.members.push(data);
+                }
             });
         });
         if (this.includeMessages)
@@ -118,7 +122,11 @@ export class UserConverter implements DataConverter<User>
         if (this.includeFriends) {
             friends.forEach((friend) => {
                 friend.withConverter(new UserConverter(false)).get().then((doc) => {
-                    user.friends.push(doc.data() ?? User.create());
+                    let data = doc.data();
+                    if (data !== undefined)
+                    {
+                        user.friends.push(data);
+                    }
                 });
             });
         }

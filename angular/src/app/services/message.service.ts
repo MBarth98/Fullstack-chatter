@@ -16,10 +16,10 @@ export class MessageService {
   }
 
   async createConversation(conversation: Conversation) {
-    return await this.database.add({
-      name: conversation.name,
-      members: conversation.members.map((member) => Firebase.storage.collection("users").doc(member.id)),
-      messages: []
+    return await this.database.add({}).then((doc) => {
+      conversation.id = doc.id;
+      this.database.doc(conversation.id).withConverter(new ConversationConverter).set(conversation, { merge: true });
+      return conversation;
     });
   }
 
@@ -27,7 +27,7 @@ export class MessageService {
 
     // add message to storage
     // add message reference to conversation
-    
+
     await this.database.doc(conversation_id).collection("messages").doc(message.id).set({
       message: message.message,
       sender: message.sender,
