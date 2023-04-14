@@ -91,7 +91,6 @@ export class MessageConverter implements DataConverter<Message>
 
 export class ConversationConverter implements DataConverter<Conversation>
 {
-    includeMessages: boolean = false;
     toFirestore(modelObject: Conversation): firebase.firestore.DocumentData
     {
         return {
@@ -100,20 +99,11 @@ export class ConversationConverter implements DataConverter<Conversation>
             members: modelObject.members.map((member) => {
                 return Firebase.storage.doc("users/" + member.id);
             }),
-            messages: modelObject.messages.map((message) => {
-                return Firebase.storage.doc("messages/" + message.id);
-            })
         };
-    }
-
-    constructor(populate_messages = false) {
-        this.includeMessages = populate_messages;
     }
 
     fromFirestore(snapshot: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>, options: firebase.firestore.SnapshotOptions): Conversation {
         let member_refs = (snapshot.data() as any).members as DocumentReference[];
-        let message_refs = (snapshot.data() as any).messages as DocumentReference[];
-
         let conversation = Conversation.create();
         conversation.id = snapshot.id;
         conversation.name = (snapshot.data() as any).name;
@@ -126,19 +116,6 @@ export class ConversationConverter implements DataConverter<Conversation>
                 }
             });
         });
-        if (this.includeMessages)
-        {
-            // todo: implement message converter
-            message_refs.forEach((message_ref) => {
-                message_ref.withConverter(new MessageConverter).get().then((message_snapshot) => {
-                    let data = message_snapshot.data();
-                    if (data !== undefined)
-                    {
-                        conversation.messages.push(data);
-                    }
-                });
-            });
-        }
         return conversation;
     }
 }
