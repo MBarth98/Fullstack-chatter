@@ -9,10 +9,16 @@
 
 <ng-template #show_content>
     <dialog-add-friends/>
-    <conversation-list (getSelection)="conversationChanged($event)"/>
+    <conversation-list [(src)]="currentConversation"/>
 
-    <div *ngIf="currentConversation != null">
-        <app-message-history-viewport [src]="currentConversation"/>
-        <app-send-message [(src)]="currentConversation" />
-    </div>
+    <div *ngIf="currentConversation == null; then please_select_convo else open_convo"></div>
+</ng-template>
+
+<ng-template #please_select_convo>
+    <p>Please select a conversation</p>
+</ng-template>
+
+<ng-template #open_convo>
+    <app-message-history-viewport [(src)]="currentConversation"/>
+    <app-send-message [(src)]="currentConversation"/>
 </ng-template>

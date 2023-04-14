@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Conversation } from 'src/app/types/Conversation';
 
 @Component({
@@ -8,7 +8,8 @@ import { Conversation } from 'src/app/types/Conversation';
 })
 export class MessageHistoryViewportComponent {
 
-  @Input() src: Conversation = new Conversation("", [], []);
+  @Input() src!: Conversation | null;
+  @Output() srcChange: EventEmitter<Conversation> = new EventEmitter<Conversation>();
 
   constructor() { }
 

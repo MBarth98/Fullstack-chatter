@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'src/app/services/message.service';
 import { Conversation } from 'src/app/types/Conversation';
 import { Message } from 'src/app/types/Message';
@@ -10,16 +11,17 @@ import { Message } from 'src/app/types/Message';
 })
 export class SendMessageComponent {
     message: any;
-    @Input() src: Conversation = new Conversation("", [], []);
+    @Input() src!: Conversation | null;
     @Output() srcChange: EventEmitter<Conversation> = new EventEmitter<Conversation>();
     
-    sendMessage() {
-        this.messageService.sendMessage(this.src.id, new Message(this.message, this.src.members[0], new Date()));
-        this.messageService.getConversation(this.src.id).then((conversation) => {
-            this.src = conversation as Conversation;
+    async sendMessage() {
+
+        await this.messageService.sendMessage(this.src!.id, new Message(this.message, this.authService.currentUser, new Date()));
+        
+        this.messageService.getConversation(this.src!.id).then((conversation) => {
+            this.srcChange.emit(conversation as Conversation);
         });
-        this.srcChange.emit(this.src);
     }
     
-    constructor(private messageService: MessageService) {}
+    constructor(private messageService: MessageService, private authService: AuthService) {}
 }

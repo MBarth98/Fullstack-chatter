@@ -1,5 +1,5 @@
 <div>
-    <div *ngFor="let message of src.messages">
+    <div *ngFor="let message of src!.messages">
         <p>
             ({{message.timestamp.toISOString()}})  -  {{message.sender.name}}: {{message.message}}
         </p>

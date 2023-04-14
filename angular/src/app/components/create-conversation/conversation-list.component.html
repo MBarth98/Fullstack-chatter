@@ -1,23 +1,20 @@
 <div>
     <form>
         <input  type="text" 
-                placeholder="Name"
-                name="name" 
-                [(ngModel)]="name"
-            >
+        placeholder="Name"
+        name="name" 
+        [(ngModel)]="name"
+        >
         <button (click)="onAddConversation()">Create Conversation</button>
     </form>
 </div>
 
 <div>
-    <form [ngFormOptions]="outSelectedConversation">
-        <select [(ngModel)]="outSelectedConversation" (ngModelChange)="onChange()" [ngModelOptions]="{standalone: true}">
-            <option selected [ngValue]="null" disabled>Select Conversation</option>
-            <option *ngFor="let conversation of conversations"
-                    [ngValue]="conversation"
-                >
-                    {{conversation.name}}
-            </option>
-        </select>
-    </form>
+    <select ngModel (ngModelChange)="onChange($event)">
+        <option selected [ngValue]="" disabled>Select Conversation</option>
+        <option *ngFor="let c of conversations" [ngValue]="c"
+        >
+        {{c.name}}
+    </option>
+</select>
 </div>
