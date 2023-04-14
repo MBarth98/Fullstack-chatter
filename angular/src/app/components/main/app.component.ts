@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getUsers().then((users) => {
       users.forEach((user) => {
-        console.log(JSON.stringify(user));
+        console.log(user);
       });
     });
   }

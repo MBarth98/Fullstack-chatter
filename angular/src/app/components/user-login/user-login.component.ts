@@ -14,12 +14,6 @@ export class UserLoginComponent {
   constructor(private authService: AuthService) { }
 
   async onLogin() {
-    await this.authService.login(this.email, "password").then(() => {
-      if (AuthService.user == null) {
-        console.log("User not found");
-      } else {
-        console.log("User found");
-      }
-    });
+    await this.authService.login(this.email, "password").then(() => {});
   }
 }
