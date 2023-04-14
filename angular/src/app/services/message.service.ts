@@ -26,6 +26,7 @@ export class MessageService {
         let message_collection = this.database_conversation.doc(conversation_id).collection("messages");
         
         return await message_collection.add({}).then((doc) => {
+            message.id = doc.id;
             message_collection.doc(doc.id).withConverter(new MessageConverter).set(message, { merge: true });
         });
     }
