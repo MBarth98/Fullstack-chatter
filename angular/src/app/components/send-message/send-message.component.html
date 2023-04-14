@@ -1,1 +1,6 @@
-<p>send-message works!</p>
+<div>
+    <form>
+        <input type="text" [(ngModel)]="message" name="message" placeholder="Message">
+        <button (click)="sendMessage()">Send</button>
+    </form>
+</div>

@@ -3,6 +3,7 @@ import 'firebase/compat/firestore';
 import { ConfigLoader } from "../types/FirebaseConfig";
 import { User } from '../types/User';
 import { Conversation } from '../types/Conversation';
+import { Message } from '../types/Message';
 
 export type DocumentReference = firebase.firestore.DocumentReference;
 export type DocumentData = firebase.firestore.DocumentData;
@@ -13,12 +14,23 @@ export type CollectionReference = firebase.firestore.CollectionReference;
 export type Query = firebase.firestore.Query;
 export type DataConverter<T> = firebase.firestore.FirestoreDataConverter<T>;
 
+export type FieldValue = firebase.firestore.FieldValue;
+
 export class Firebase
 {
     private static initialized: boolean = false;
     
     private static app : firebase.app.App;
     private static firestore: firebase.firestore.Firestore;
+
+    static union(data: DocumentData) : FieldValue {
+        if (!Firebase.initialized) {
+            new Firebase();
+        }
+
+        return firebase.firestore.FieldValue.arrayUnion(data);
+    }
+
     constructor() {
         if (!Firebase.initialized) {
             if (ConfigLoader.config == undefined) {
@@ -27,7 +39,6 @@ export class Firebase
             Firebase.app = firebase.initializeApp(ConfigLoader.config as object);
             Firebase.firestore = firebase.firestore();
             Firebase.initialized = true;
-            firebase.firestore.DocumentReference;
         }
     }
 
@@ -48,6 +59,36 @@ export class Firebase
     }
 }
 
+export class MessageConverter implements DataConverter<Message>
+{
+    toFirestore(modelObject: Message): firebase.firestore.DocumentData
+    {
+        return {
+            id: modelObject.id,
+            message: modelObject.message,
+            sender: Firebase.storage.doc("users/" + modelObject.sender.id),
+            timestamp: firebase.firestore.Timestamp.fromDate(new Date(Date.now()))
+        };
+    }
+
+    fromFirestore(snapshot: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>, options: firebase.firestore.SnapshotOptions): Message {
+        let sender_ref = (snapshot.data() as any).sender as DocumentReference;
+        let message = Message.create();
+        message.id = snapshot.id;
+        message.message = (snapshot.data() as any).message as string;
+        sender_ref.withConverter(new UserConverter).get().then((doc) => {
+            let user = doc.data();
+            if (user != undefined)
+            {
+                message.sender = user;
+            }
+        });
+        let timestamp = (snapshot.data() as any).timestamp as firebase.firestore.Timestamp;
+        message.timestamp = new Date(timestamp.toMillis());
+        return message;
+    }
+}
+
 export class ConversationConverter implements DataConverter<Conversation>
 {
     includeMessages: boolean = false;
@@ -60,7 +101,7 @@ export class ConversationConverter implements DataConverter<Conversation>
                 return Firebase.storage.doc("users/" + member.id);
             }),
             messages: modelObject.messages.map((message) => {
-                return Firebase.storage.doc("conversations/" + modelObject.id + "/messages/" + message.id);
+                return Firebase.storage.doc("messages/" + message.id);
             })
         };
     }
@@ -71,6 +112,7 @@ export class ConversationConverter implements DataConverter<Conversation>
 
     fromFirestore(snapshot: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>, options: firebase.firestore.SnapshotOptions): Conversation {
         let member_refs = (snapshot.data() as any).members as DocumentReference[];
+        let message_refs = (snapshot.data() as any).messages as DocumentReference[];
 
         let conversation = Conversation.create();
         conversation.id = snapshot.id;
@@ -87,7 +129,15 @@ export class ConversationConverter implements DataConverter<Conversation>
         if (this.includeMessages)
         {
             // todo: implement message converter
-            conversation.messages = (snapshot.data() as any).messages;
+            message_refs.forEach((message_ref) => {
+                message_ref.withConverter(new MessageConverter).get().then((message_snapshot) => {
+                    let data = message_snapshot.data();
+                    if (data !== undefined)
+                    {
+                        conversation.messages.push(data);
+                    }
+                });
+            });
         }
         return conversation;
     }

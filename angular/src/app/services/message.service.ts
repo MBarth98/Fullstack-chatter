@@ -1,51 +1,50 @@
 import { Injectable } from '@angular/core';
-import { DocumentReference, Firebase, CollectionReference, ConversationConverter } from '../helper/firebase.static';
-
+import { Firebase, CollectionReference, ConversationConverter, FieldValue, MessageConverter } from '../helper/firebase.static';
 import { Message } from '../types/Message';
 import { Conversation } from '../types/Conversation';
-import { User } from '../types/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
-  database: CollectionReference;
-
+  database_conversation: CollectionReference;
+  database_message: CollectionReference;
+  
   constructor() {
-    this.database = Firebase.storage.collection("conversations");
+    this.database_conversation = Firebase.storage.collection("conversations");
+    this.database_message = Firebase.storage.collection("messages");
   }
-
+  
   async createConversation(conversation: Conversation) {
-    return await this.database.add({}).then((doc) => {
+    return await this.database_conversation.add({}).then((doc) => {
       conversation.id = doc.id;
-      this.database.doc(conversation.id).withConverter(new ConversationConverter).set(conversation, { merge: true });
+      this.database_conversation.doc(conversation.id).withConverter(new ConversationConverter).set(conversation, { merge: true });
       return conversation;
     });
   }
-
+  
   async sendMessage(conversation_id: string, message: Message) {
-
-    // add message to storage
-    // add message reference to conversation
-
-    await this.database.doc(conversation_id).collection("messages").doc(message.id).set({
-      message: message.message,
-      sender: message.sender,
-      timestamp: message.timestamp
+    return await this.database_message.add({}).then((doc) => {
+      message.id = doc.id;
+      this.database_message.doc(message.id).withConverter(new MessageConverter).set(message, { merge: true });
+      this.database_conversation.doc(conversation_id).update({
+        messages: Firebase.union(Firebase.storage.doc("messages/" + message.id))
+      });
+      return message;
     });
   }
-
+  
   async getConversation(conversation_id: string) {
     let query;
-    query = this.database.doc(conversation_id);
-    query.withConverter(new ConversationConverter(true));
-    return (await query.get()).data() as Conversation;
+    query = this.database_conversation.doc(conversation_id);
+    let conversations = await query.withConverter(new ConversationConverter(true)).get();
+    return conversations.data();
   }
-
+  
   async getConversations(user_id: string) {
     let user_ref = Firebase.storage.collection("users").doc(user_id);
-    let query = this.database.where("members", "array-contains", user_ref);
-
+    let query = this.database_conversation.where("members", "array-contains", user_ref);
+    
     let conversations = await query.withConverter(new ConversationConverter()).get();
     return conversations.docs.map((doc) => doc.data());
   }

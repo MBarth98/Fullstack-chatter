@@ -2,6 +2,10 @@ import { User } from "./User";
 
 export class Message
 {
+    static create() : Message {
+        return new Message("", User.create(), new Date());
+    }
+
     id: string = "";
     message: string;
     sender: User;

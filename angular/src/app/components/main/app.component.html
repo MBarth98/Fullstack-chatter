@@ -13,6 +13,6 @@
 
     <div *ngIf="currentConversation != null">
         <app-message-history-viewport [src]="currentConversation"/>
-        <app-send-message [src]="currentConversation"/>
+        <app-send-message [(src)]="currentConversation" />
     </div>
 </ng-template>
