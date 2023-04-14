@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Conversation } from 'src/app/types/Conversation';
 
 @Component({
   selector: 'app-message-history-viewport',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./message-history-viewport.component.scss']
 })
 export class MessageHistoryViewportComponent {
+
+  @Input() src: Conversation = new Conversation("", [], []);
+
+  constructor() { }
+
 
 }

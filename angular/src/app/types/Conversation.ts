@@ -5,10 +5,11 @@ export class Conversation {
     id: string = "";
     name: string;
     members: User[];
-    messages: Message[] = [];
+    messages: Message[];
   
-    constructor(name: string, members: User[]) {
+    constructor(name: string, members: User[], messages: Message[]) {
       this.name = name;
       this.members = members;
+      this.messages = messages
     }
   }

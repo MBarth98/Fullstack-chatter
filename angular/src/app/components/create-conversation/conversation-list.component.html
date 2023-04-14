@@ -10,15 +10,14 @@
 </div>
 
 <div>
-    <form>
-        <select>
-            <option *ngFor="let conversation of conversations" 
-                    [value]="conversation"
+    <form [ngFormOptions]="outSelectedConversation">
+        <select [(ngModel)]="outSelectedConversation" (ngModelChange)="onChange()" [ngModelOptions]="{standalone: true}">
+            <option selected [ngValue]="null" disabled>Select Conversation</option>
+            <option *ngFor="let conversation of conversations"
+                    [ngValue]="conversation"
                 >
                     {{conversation.name}}
             </option>
         </select>
-
-        <button (click)="onSelectConversation()">Select Conversation</button>
     </form>
 </div>

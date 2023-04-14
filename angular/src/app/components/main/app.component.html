@@ -9,5 +9,10 @@
 
 <ng-template #show_content>
     <dialog-add-friends/>
-    <conversation-list/>
+    <conversation-list (getSelection)="conversationChanged($event)"/>
+
+    <div *ngIf="currentConversation != null">
+        <app-message-history-viewport [src]="currentConversation"/>
+        <app-send-message [src]="currentConversation"/>
+    </div>
 </ng-template>

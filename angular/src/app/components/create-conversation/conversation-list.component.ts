@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'src/app/services/message.service';
 import { UserService } from 'src/app/services/user.service';
@@ -10,6 +10,13 @@ import { Conversation } from 'src/app/types/Conversation';
   styleUrls: ['./conversation-list.component.scss']
 })
 export class ConversationListComponent {
+  outSelectedConversation: any = null;
+
+  @Output() getSelection : EventEmitter<Conversation> = new EventEmitter();
+
+  onChange() {
+    this.getSelection.emit(this.outSelectedConversation as Conversation);
+  }
 
   name: string = "";
   conversations: Conversation[] = [];
@@ -25,7 +32,7 @@ export class ConversationListComponent {
   ) { }
 
   async onAddConversation() {
-    this.messageService.createConversation(new Conversation(this.name, await this.userService.getUsers())).then(() => {;
+    this.messageService.createConversation(new Conversation(this.name, await this.userService.getUsers(), [])).then(() => {;
       this.updateConversations();
     });
   }
@@ -34,9 +41,5 @@ export class ConversationListComponent {
     this.messageService.getConversations(this.authService.currentUser.id).then((conversations) => {
       this.conversations = conversations;
     });
-  }
-
-  onSelectConversation() {
-    throw new Error("Method not implemented.");
   }
 }
