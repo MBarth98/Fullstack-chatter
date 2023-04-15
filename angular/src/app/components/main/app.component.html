@@ -1,24 +1,27 @@
 
+<div class="main">
+    <div *ngIf="authService.currentUser == null; then landing_page else playground"></div>
+</div>
 
-<div *ngIf="authService.currentUser == null; then show_login else show_content"></div>
-
-<ng-template #show_login>
+<ng-template #landing_page>
     <dialog-create-user/>
     <app-user-login/>
 </ng-template>
 
-<ng-template #show_content>
-    <dialog-add-friends/>
+<ng-template #playground>
+    <friends-list/>
     <conversation-list [(src)]="currentConversation"/>
 
-    <div *ngIf="currentConversation == null; then please_select_convo else open_convo"></div>
+    <div class="viewport">
+        <div *ngIf="currentConversation == null; then please_select_conversation else opened_conversation"></div>
+    </div>
 </ng-template>
 
-<ng-template #please_select_convo>
+<ng-template #please_select_conversation>
     <p>Please select a conversation</p>
 </ng-template>
 
-<ng-template #open_convo>
+<ng-template #opened_conversation>
     <app-message-history-viewport [(src)]="currentConversation"/>
     <app-send-message [(src)]="currentConversation"/>
 </ng-template>

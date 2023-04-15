@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddFriendsComponent } from './add-friends.component';
+import { AddFriendsComponent } from './friends-list.component';
 
 describe('AddFriendsComponent', () => {
   let component: AddFriendsComponent;

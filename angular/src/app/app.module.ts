@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './components/main/app.component';
-import { CreateUserComponent } from './components/create-user/create-user.component';
-import { AddFriendsComponent } from './components/add-friends/add-friends.component';
-import { ConversationListComponent } from './components/conversation-list/conversation-list.component';
-import { SendMessageComponent } from './components/send-message/send-message.component';
-import { MessageHistoryViewportComponent } from './components/message-history-viewport/message-history-viewport.component';
-import { UserLoginComponent } from './components/user-login/user-login.component';
+import { CreateUserComponent } from './components/landing_page/create-user/create-user.component';
+import { AddFriendsComponent } from './components/playground/friends-list/friends-list.component';
+import { ConversationListComponent } from './components/playground/conversation-list/conversation-list.component';
+import { SendMessageComponent } from './components/playground/send-message/send-message.component';
+import { MessageHistoryViewportComponent } from './components/playground/message-history-viewport/message-history-viewport.component';
+import { UserLoginComponent } from './components/landing_page/user-login/user-login.component';
 
 @NgModule({
   declarations: [

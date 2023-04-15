@@ -10,7 +10,13 @@ import { MessageService } from 'src/app/services/message.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    
+    constructor
+    (
+        private messageService: MessageService, 
+        private userService: UserService, 
+        public authService: AuthService
+    ) {}
+
     private _currentConversation: Conversation | null = null;
     
     public get currentConversation(): Conversation | null {
@@ -27,8 +33,6 @@ export class AppComponent implements OnInit {
             console.log(this.currentConversation);
         });
     }
-    
-    constructor(private messageService: MessageService, private userService: UserService, public authService: AuthService) {}
     
     ngOnInit(): void {
         this.userService.getUsers().then((users) => {
