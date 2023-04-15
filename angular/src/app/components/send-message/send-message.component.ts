@@ -10,18 +10,23 @@ import { Message } from 'src/app/types/Message';
     styleUrls: ['./send-message.component.scss']
 })
 export class SendMessageComponent {
+    
     message: any;
     @Input() src!: Conversation | null;
     @Output() srcChange: EventEmitter<Conversation> = new EventEmitter<Conversation>();
-    
-    async sendMessage() {
 
+    constructor(private messageService: MessageService, private authService: AuthService) {}
+    
+    async sendMessage() {        
         await this.messageService.sendMessage(this.src!.id, new Message(this.message, this.authService.currentUser, new Date()));
         
+        this.forceRefresh();
+    }
+
+    forceRefresh() {
         this.messageService.getConversation(this.src!.id).then((conversation) => {
             this.srcChange.emit(conversation as Conversation);
         });
     }
     
-    constructor(private messageService: MessageService, private authService: AuthService) {}
 }
