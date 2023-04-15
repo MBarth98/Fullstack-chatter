@@ -1,11 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-user-login',
-  templateUrl: './user-login.component.html',
-  styleUrls: ['./user-login.component.scss']
+  selector: 'form-login',
+  templateUrl: './form-login.component.html',
+  styleUrls: ['./form-login.component.scss']
 })
 export class UserLoginComponent {
 

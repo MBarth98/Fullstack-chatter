@@ -12,12 +12,12 @@ import { Conversation } from 'src/app/types/Conversation';
 export class ConversationListComponent {
     onChange($event: Conversation) {
         this.messageService.getConversation($event.id).then((conversation) => {
-            this.srcChange.emit(conversation as Conversation);
+            this.selectedChange.emit(conversation as Conversation);
         });
     }
     
-    @Input() src!: Conversation | null;
-    @Output() srcChange: EventEmitter<Conversation> = new EventEmitter<Conversation>();
+    @Input() selected!: Conversation | null;
+    @Output() selectedChange: EventEmitter<Conversation> = new EventEmitter<Conversation>();
     
     name: string = "";
     conversations: Conversation[] = [];

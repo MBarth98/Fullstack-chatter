@@ -4,15 +4,17 @@
 </div>
 
 <ng-template #landing_page>
-    <dialog-create-user/>
-    <app-user-login/>
+    <form-register/>
+    <form-login/>
 </ng-template>
 
 <ng-template #playground>
-    <friends-list/>
-    <conversation-list [(src)]="currentConversation"/>
+    <div class="viewport-social">
+        <friends-list/>
+        <conversation-list [(selected)]="currentConversation"/>
+    </div>
 
-    <div class="viewport">
+    <div class="viewport-primary">
         <div *ngIf="currentConversation == null; then please_select_conversation else opened_conversation"></div>
     </div>
 </ng-template>

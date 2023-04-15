@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'dialog-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.scss']
+  selector: 'form-register',
+  templateUrl: './form-register.component.html',
+  styleUrls: ['./form-register.component.scss']
 })
 export class CreateUserComponent {
 
